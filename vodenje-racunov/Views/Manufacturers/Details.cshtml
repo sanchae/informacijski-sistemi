@@ -1,0 +1,83 @@
+﻿@model vodenje_racunov.Models.Manufacturer
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Manufacturer</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ManufacturerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ManufacturerName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ManufacturerStreetName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ManufacturerStreetName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ManufacturerStreetNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ManufacturerStreetNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ManufacturerPostNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ManufacturerPostNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ManufacturerCity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ManufacturerCity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CountryId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Country.CountryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ManufacturerEmail)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ManufacturerEmail)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ManufacturerPhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ManufacturerPhoneNumber)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ManufacturerId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

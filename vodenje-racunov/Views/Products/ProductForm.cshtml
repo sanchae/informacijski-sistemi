@@ -1,0 +1,66 @@
+﻿@using Microsoft.Ajax.Utilities
+@using vodenje_racunov.ViewModels
+@model vodenje_racunov.ViewModels.ProductFormViewModel
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (Model.Product == null)
+{
+    <h2>Nov</h2>
+}
+else
+{
+    <h2>Urejanje</h2>
+}
+@using (Html.BeginForm("Save", "Products"))
+{
+    @Html.ValidationSummary(true, "Prišlo je do napake. Preverite vnosna polja.")
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.Name )
+        @Html.TextBoxFor(p => p.Product.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.ShortName)
+        @Html.TextBoxFor(p => p.Product.ShortName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.ShortName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.PurchasePrice)
+        @Html.TextBoxFor(p => p.Product.PurchasePrice, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.PurchasePrice)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.SellingPrice)
+        @Html.TextBoxFor(p => p.Product.SellingPrice, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.SellingPrice)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.WarrantyInMonths)
+        @Html.TextBoxFor(p => p.Product.WarrantyInMonths, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.WarrantyInMonths)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.ManufacturerId)
+        @Html.DropDownListFor(p => p.Product.ManufacturerId, new SelectList(Model.ManufacturersList, "ManufacturerId", "ManufacturerName"), "Izberi proizvajalca", new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.ManufacturerId)
+        </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.CategoryId)
+        @Html.DropDownListFor(p => p.Product.CategoryId, new SelectList(Model.CategoriesList, "CategoryId", "CategoryName"), "Izberi kategorijo", new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.CategoryId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Product.Description)
+        @Html.TextAreaFor(p => p.Product.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Product.Description)
+    </div>
+    @Html.HiddenFor(p => p.Product.ProductId)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Shrani</button>
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

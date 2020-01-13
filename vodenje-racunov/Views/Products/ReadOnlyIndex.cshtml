@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Produkti</h2>
+
+<div><br /></div>
+
+<table id="products" class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ime</th>
+            <th scope="col">Kratko ime</th>
+            <th scope="col">Proizvajalec</th>
+            <th scope="col">Prodajna cena</th>
+            <th scope="col">Kategorija</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr></tr>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#products").DataTable({
+                ajax: {
+                    url: "/api/products",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "productId"
+                        //render: function(data, type, product) {
+                        //    return "<a href='products/edit/" + product.ProductId + "'>" + product.ProductName + "</a>";
+                        //}
+                    },
+                    {
+                        data: "name"
+                    },
+                    {
+                        data: "shortName"
+                    },
+                    {
+                        data: "manufacturer.manufacturerName"
+                    },
+                    {
+                        data: "sellingPrice",
+                        render: function (data) {
+                            return data + "€";
+                        }
+                    },
+                    {
+                        data: "category.categoryName"
+                    }
+                ]
+            });
+        })
+    </script>
+}

@@ -1,0 +1,127 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.field-validation-error {
+    color: red!important;
+}
+
+.input-validation-error {
+    border: 2px solid red;
+}
+
+button > a, button > a:hover {
+    color: white;
+    text-decoration: none !important;
+}
+
+#totals {
+    float: right;
+    text-align: right;
+}
+#download {
+    float: right;
+    text-align: right;
+    margin-top: 15px;
+}
+
+.doc-heading {
+    border-bottom: 2px solid #ddd;
+}
+
+.heading {
+    border-bottom: 2px solid #333;
+    margin-bottom: 30px;
+}
+
+.articlesTableRow{
+    height: 50px!important;
+}
+
+#item{
+    width: 25%;
+}
+
+#quantity{
+    width: 10%;
+}
+
+#price {
+    width: 15%;
+}
+
+#disc {
+    width: 10%;
+}
+
+#add_row {
+    float: right;
+}
+
+#Product_Description {
+    min-width: 280px;
+    max-width: 280px;
+}
+
+/*---------------------------------------*/
+/*PDF export*/
+.export-pdf {
+    padding-top: 0px!important;
+}
+
+.fr {
+    float: right;
+    text-align: right;
+}
+
+.fl {
+    float: left;
+    text-align: left;
+}
+
+.pdf-total {
+    border-top: 2px solid #333;
+    font-weight: 600;
+}
+
+.cs-underline {
+    border-bottom: 1px solid #333;
+}
+
+.ftr {
+    padding-top: 5px;
+    margin-top: 20px;
+    border-top: 2px solid #333;
+}
+
+.inline {
+    display: inline;
+    max-width: 49%;
+    width: 200px;
+}
+
+#refreshIcon {
+    cursor: pointer;
+}
+

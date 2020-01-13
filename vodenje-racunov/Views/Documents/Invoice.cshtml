@@ -1,0 +1,76 @@
+﻿@model vodenje_racunov.ViewModels.DocumentDetailsModel
+@{
+    ViewBag.Title = "Offer";
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
+}
+<div class="col-lg-3 inline">
+    <h4 class="doc-heading">Podatki o stranki</h4>
+    <b>@Html.DisplayFor(model => model.Document.Client.Name)</b><br />
+    @Html.DisplayFor(model => model.Document.Client.StreetName) @Html.DisplayFor(model => model.Document.Client.StreetNumber)<br />
+    @Html.DisplayFor(model => model.Document.Client.PostNumber) @Html.DisplayFor(model => model.Document.Client.City) <br />
+    @Html.DisplayFor(model => model.Document.Client.Country.CountryName)
+</div>
+<div class="col-lg-3 inline">
+    <h4 class="doc-heading">Račun št.: <b>@Model.Document.DocumentId</b></h4>
+    <b>Datum računa: <span class="fr">@(Model.Document.InvoiceDate.HasValue ? Model.Document.InvoiceDate.Value.ToString("dd.MM.yyyy") : "")</span></b><br />
+    Datum izdaje blaga/opravljene storitve <span class="fr">@(Model.Document.DeliveryNoteDate.HasValue ? Model.Document.DeliveryNoteDate.Value.ToString("dd.MM.yyyy") : "")</span><br />
+    Datum zapadlosti: <span class="fr">@(Model.Document.InvoiceDateOfMaturity.HasValue ? Model.Document.InvoiceDateOfMaturity.Value.ToString("dd.MM.yyyy") : "")</span>
+    <br />
+    Šifra kupca: <span class="fr">@Model.Document.Client.Id</span><br />
+    ID št. za DDV (kupec): <span class="fr">@Model.Document.Client.taxNumber</span>
+</div>
+<div class="col-lg-12">
+    <br />
+    <br />
+    Na podlagi vašega povpraševanja vam pošiljamo ponudbo/predračun za:
+    <br />
+
+</div>
+<div class="col-lg-12"><br /><br /></div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Produkt</th>
+            <th scope="col">Količina</th> @*quantity*@
+            <th scope="col">Cena</th>@*price*@
+            <th scope="col">Popust</th>@*discount*@
+            <th scope="col">DDV</th>@*taxRate*@
+            <th scope="col">Montaža</th>@*taxRate*@
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var article in Model.ArticlesList)
+            {
+                <tr>
+                    <th scope="row">@article.ProductId</th>
+                    <td style="max-width: 280px">
+                        @article.Product.ShortName <br />
+                    @article.Product.Description
+                </td>
+                <td>@article.Quantity</td>
+                <td>@article.Price €</td>
+                <td>@article.Discount %</td>
+                <td>@article.taxRate %</td>
+                <td>@article.assemblyPrice €</td>
+            </tr>
+        }
+        }
+    </tbody>
+</table>
+<div class="col-lg-12" id="totals">
+    <div>
+        Skupaj brez DDV: @Model.Document.TotalExcludingVAT €<br />
+        Popust: @Model.Document.DiscountAmount €<br />
+        Znesek brez DDV: @Model.Document.AmountExcludingVAT €<br />
+        <span class="pdf-total"><b>Znesek z DDV: @Model.Document.AmountIncludingVAT €</b></span><br />
+    </div>
+</div>
+<div class="col-lg-12"><br/>
+    Prosimo, da znesek računa nakažete na TRR št. SI56 3000 0001 3626 305<br/> Sberbank d.d. SWIFT-BIC koda: SABRSI2X. <br />
+    Pri plačilu se sklicujte na številko računa.<br /><br />
+    Garancija za elemente prezračevalnega sistema: <b>2 leti.</b>
+</div>
+

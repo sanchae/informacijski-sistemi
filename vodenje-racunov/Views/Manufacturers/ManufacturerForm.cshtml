@@ -1,0 +1,71 @@
+﻿@using Microsoft.Ajax.Utilities
+@using vodenje_racunov.ViewModels
+@model vodenje_racunov.ViewModels.ManufacturerFormViewModel
+@{
+    ViewBag.Title = "ManufacturerForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.Manufacturer == null)
+{
+    <h2>Nov</h2>
+}
+else
+{
+    <h2>Urejanje</h2>
+}
+@using (Html.BeginForm("Save", "Manufacturers"))
+{
+    @Html.ValidationSummary(true, "Prišlo je do napake. Preverite vnosna polja.")
+    <div class="form-group">
+        @Html.LabelFor(p => p.Manufacturer.ManufacturerName)
+        @Html.TextBoxFor(p => p.Manufacturer.ManufacturerName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Manufacturer.ManufacturerName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Manufacturer.ManufacturerEmail)
+        @Html.TextBoxFor(p => p.Manufacturer.ManufacturerEmail, new { type = "email", placeholder = "info@manufacturer.com", @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Manufacturer.ManufacturerEmail)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Manufacturer.ManufacturerPhoneNumber)
+        @Html.TextBoxFor(p => p.Manufacturer.ManufacturerPhoneNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Manufacturer.ManufacturerPhoneNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Manufacturer.ManufacturerStreetName)
+        @Html.TextBoxFor(p => p.Manufacturer.ManufacturerStreetName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Manufacturer.ManufacturerStreetName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Manufacturer.ManufacturerStreetNumber)
+        @Html.TextBoxFor(p => p.Manufacturer.ManufacturerStreetNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Manufacturer.ManufacturerStreetNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Manufacturer.ManufacturerPostNumber)
+        @Html.TextBoxFor(p => p.Manufacturer.ManufacturerPostNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Manufacturer.ManufacturerPostNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Manufacturer.ManufacturerCity)
+        @Html.TextBoxFor(p => p.Manufacturer.ManufacturerCity, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Manufacturer.ManufacturerCity)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Manufacturer.CountryId)
+        <a href="#" class="btn btn-secondary a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("New", "Country") + "'");" style="padding-top: 3px;">
+            <span>Dodaj državo</span>
+        </a>
+        @Html.DropDownListFor(p => p.Manufacturer.CountryId, new SelectList(Model.CountriesList, "CountryId", "CountryName"), "Izberi proizvajalca", new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Manufacturer.CountryId)
+    </div>
+    @Html.HiddenFor(p => p.Manufacturer.ManufacturerId)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Shrani</button>
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+

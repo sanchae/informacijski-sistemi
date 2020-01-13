@@ -1,0 +1,59 @@
+﻿@model vodenje_racunov.ViewModels.DocumentDetailsModel
+@{
+    ViewBag.Title = "Offer";
+    Layout = "~/Views/Shared/_PdfLayout.cshtml";
+}
+
+    <div>
+        <dl class="dl-horizontal">
+            <div class="col-lg-3 inline">
+                <h4 class="doc-heading">Podatki o stranki</h4>
+                <b>@Html.DisplayFor(model => model.Document.Client.Name)</b><br />
+                @Html.DisplayFor(model => model.Document.Client.StreetName) @Html.DisplayFor(model => model.Document.Client.StreetNumber)<br />
+                @Html.DisplayFor(model => model.Document.Client.PostNumber) @Html.DisplayFor(model => model.Document.Client.City) <br />
+                @Html.DisplayFor(model => model.Document.Client.Country.CountryName)
+            </div>
+            <div class="col-lg-3 inline">
+                <h4 class="doc-heading">Dobavnica št.: <b>@Model.Document.DocumentId</b></h4>
+                <b>Datum dobavnice: <span class="fr">@(Model.Document.DeliveryNoteDate.HasValue ? Model.Document.DeliveryNoteDate.Value.ToString("dd.MM.yyyy") : "")</span></b><br />
+                Datum izdaje blaga/opr. storitve: <span class="fr">@(Model.Document.DeliveryNoteDate.HasValue ? Model.Document.DeliveryNoteDate.Value.ToString("dd.MM.yyyy") : "")</span><br />
+                <br />
+                Šifra kupca: <span class="fr">@Model.Document.Client.Id</span><br />
+                ID št. za DDV (kupec): <span class="fr">@Model.Document.Client.taxNumber</span>
+            </div>
+            <div class="col-lg-12">
+                <br />
+                <br />
+            </div>
+            <div class="col-lg-12"><br /><br /></div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Produkt</th>
+                        <th scope="col">Količina</th> @*quantity*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var article in Model.ArticlesList)
+                        {
+                            <tr>
+                                <th scope="row">@article.ProductId</th>
+                                <td style="max-width: 280px">
+                                    @article.Product.ShortName <br />
+                                @article.Product.Description
+                            </td>
+                            <td>@article.Quantity</td>
+                        </tr>
+                    }
+                    }
+                </tbody>
+            </table>
+            <div class="col-lg-12"><br/><br/>
+                Potrjujem prejem zgornjih artiklov in opravljenih storitev.
+            </div>
+        </dl>
+    </div>
+

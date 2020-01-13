@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Proizvajalci</h2>
+
+<a href="#" class="btn btn-primary a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("New", "Manufacturers") + "'");">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    <span>Dodaj</span>
+</a>
+<a href="#" class="btn btn-info a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("Index", "Country") + "'");">
+    <span>Države</span>
+</a>
+
+<div><br /></div>
+
+<table id="manufacturers" class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ime</th>
+            <th scope="col">Email</th>
+            <th scope="col">Tel. št.</th>
+            <th scope="col">Država</th>
+            <th scope="col">Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr></tr>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#manufacturers").DataTable({
+                ajax: {
+                    url: "/api/manufacturers",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "manufacturerId"
+                    },
+                    {
+                        data: "manufacturerName",
+                        render: function (data, type, product) {
+                            return "<b>" + data + "</b";
+                        }
+                    },
+                    {
+                        data: "manufacturerEmail",
+                        render: function (data) {
+                            if (data == null) {
+                                return "";
+                            } else {
+                                return "<a href=MailTo:" + data + ">" + data + "</>";
+                            }
+                            
+                        }
+                    },
+                    {
+                        data: "manufacturerPhoneNumber"
+                    },
+                    {
+                        data: "country.countryName"
+                    },
+                    {
+                        data: "manufacturerId",
+                        render: function (data, type, manufacturer) {
+                            return "<button class='btn btn-xs btn-primary'><a href='/manufacturers/details/" + manufacturer.manufacturerId + "'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>  Več  </a></button> " +
+                                "<button class='btn btn-xs btn-info'><a href='/manufacturers/edit/" + manufacturer.manufacturerId + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> Uredi</a></button> " +
+                                "<button class='btn btn-xs btn-danger js-delete' data-manufacturer-id=" + data + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Izbriši</button>";
+                        }
+                    }
+                ]
+            });
+            $("#manufacturers").on("click", ".js-delete",
+                function () {
+                    var button = $(this);
+                    bootbox.confirm("Ali ste pripričani, da želite izbrisati tega proizvajalca?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/manufacturers/" + button.attr("data-manufacturer-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        button.parents("tr").remove();
+                                    }
+                                });
+                            }
+                        });
+                });
+        })
+    </script>
+}

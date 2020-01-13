@@ -1,0 +1,79 @@
+﻿@model IEnumerable<vodenje_racunov.Models.Country>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Države</h2>
+
+<a href="#" class="btn btn-primary a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("New", "Country") + "'");">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true" ></span>
+    <span>Dodaj</span>
+</a>
+
+
+<div><br /></div>
+
+<table id="countries" class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ime</th>
+            <th scope="col">Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr></tr>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#countries").DataTable({
+                ajax: {
+                    url: "/api/country",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "countryId"
+                    },
+
+                    {
+                        data: "countryName",
+                        render: function(data, type, country) {
+                            return "<b>" + country.countryName + "</b>";
+                        }
+                    },
+                    {
+                        data: "countryId",
+                        render: function (data, type, country) {
+                            return "<button class='btn btn-xs btn-primary'><a href='/country/details/" + country.countryId + "'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>  Več  </a></button> " +
+                            "<button class='btn btn-xs btn-info'><a href='/country/edit/" + country.countryId + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> Uredi</a></button> " +
+                                   "<button class='btn btn-xs btn-danger js-delete' data-country-id=" + data + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Izbriši</button>";
+                        }
+                    }
+                ]
+            });
+            $("#countries").on("click", ".js-delete",
+                function () {
+                    var button = $(this);
+                    bootbox.confirm("Ali ste pripričani, da želite izbrisati to državo?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/country/" + button.attr("data-country-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        button.parents("tr").remove();
+                                    }
+                                });
+                            }
+                        });
+                });
+        })
+    </script>
+}

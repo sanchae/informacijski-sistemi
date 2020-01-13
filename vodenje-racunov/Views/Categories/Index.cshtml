@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Kategorije izdelkov</h2>
+
+<a href="#" class="btn btn-primary a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("New", "Categories") + "'");">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    <span>Dodaj</span>
+</a>
+
+<div><br /></div>
+
+<table id="categories" class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Naziv</th>
+            <th scope="col">Opis</th>
+            <th scope="col">Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr></tr>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#categories").DataTable({
+                ajax: {
+                    url: "/api/categories",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "categoryId"
+                    },
+                    {
+                        data: "categoryName",
+                        render: function (data, type, category) {
+                            return "<b>" + data + "</b>";
+                        }
+                    },
+                    {
+                        data: "categoryDescription"
+                    },
+                    {
+                        data: "categoryId",
+                        render: function (data, type, category) {
+                            return "<button class='btn btn-xs btn-primary'><a href='/categories/details/" + category.categoryId + "'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>  Več  </a></button> " +
+                                "<button class='btn btn-xs btn-info'><a href='/categories/edit/" + category.categoryId + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> Uredi</a></button> " +
+                                "<button class='btn btn-xs btn-danger js-delete' data-category-id=" + data + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Izbriši</button>";
+                        }
+                    }
+                ]
+            });
+            $("#categories").on("click", ".js-delete",
+                function () {
+                    var button = $(this);
+                    bootbox.confirm("Ali ste pripričani, da želite izbrisati to kategorijo?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/categories/" + button.attr("data-category-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        button.parents("tr").remove();
+                                    }
+                                });
+                            }
+                        });
+                });
+        })
+    </script>
+}

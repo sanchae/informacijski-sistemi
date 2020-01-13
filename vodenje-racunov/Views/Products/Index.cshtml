@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Produkti</h2> 
+
+<a href="#" class="btn btn-primary a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("New", "Products") + "'");">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    <span>Dodaj</span>
+</a>
+<a href="#" class="btn btn-info a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("Index", "Categories") + "'");">
+    <span>Kategorije</span>
+</a>
+<a href="#" class="btn btn-info a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("Index", "Manufacturers") + "'");">
+    <span>Proizvajalci</span>
+</a>
+
+<div><br/></div>
+
+<table id ="products" class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Ime</th>
+        <th scope="col">Kratko ime</th>
+        <th scope="col">Proizvajalec</th>
+        <th scope="col">Prodajna cena</th>
+        <th scope="col">Kategorija</th>
+        <th scope="col">Akcije</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+
+    </tr>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+    $(document).ready(function () {
+        var table = $("#products").DataTable({
+            ajax: {
+                url: "/api/products",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    data: "productId"
+                    //render: function(data, type, product) {
+                    //    return "<a href='products/edit/" + product.ProductId + "'>" + product.ProductName + "</a>";
+                    //}
+                },
+                {
+                    data: "name",
+                    //render: function(data, type, product) {
+                    //    return "<a href='products/edit/" + product.productId + "'>" + data + "</a>";
+                    //}
+                    render: function(data, type, product) {
+                        return "<b>" + data + "</b";
+                    }
+                },
+                {
+                    data: "shortName"
+                },
+                {
+                    data: "manufacturer.manufacturerName"
+                },
+                {
+                    data: "sellingPrice",
+                    render: function(data) {
+                        return data + "€";
+                    }
+                },
+                {
+                    data: "category.categoryName"
+                },
+                {
+                    data: "productId",
+                    render: function (data, type, product) {
+                        return "<button class='btn btn-xs btn-primary'><a href='/products/details/" + product.productId + "'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>  Več  </a></button> " +
+                            "<button class='btn btn-xs btn-info'><a href='/products/edit/" + product.productId + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> Uredi</a></button> " +
+                            "<button class='btn btn-xs btn-danger js-delete' data-product-id=" + data + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Izbriši</button>";
+                    }
+                }
+            ]
+        });
+            $("#products").on("click", ".js-delete",
+                function() {
+                    var button = $(this);
+                    bootbox.confirm("Ali ste pripričani, da želite izbrisati ta produkt?",
+                        function(result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/products/" + button.attr("data-product-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        button.parents("tr").remove();
+                                    }
+                                });
+                            }
+                        });
+                });
+        })
+    </script>
+}

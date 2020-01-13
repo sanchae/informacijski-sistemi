@@ -1,0 +1,371 @@
+﻿@using Microsoft.Ajax.Utilities
+@using vodenje_racunov.Models
+@using vodenje_racunov.ViewModels
+@model vodenje_racunov.ViewModels.DocumentDetailsModel
+@{
+    ViewBag.Title = "DocumentForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Urejanje - št.: @Model.Document.DocumentId</h2>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true, "Prišlo je do napake. Preverite vnosna polja.")
+    <div class="col-lg-12">
+        <div class="form-group">
+            @Html.LabelFor(p => p.Document.Client)
+            @Html.DropDownListFor(p => p.Document.ClientId, new SelectList(Model.ClientsList, "Id", "Name"), "Izberi stranko", new { @class = "form-control" })
+            @Html.ValidationMessageFor(p => p.Document.Client)
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <div class="col-lg-4">
+            <h3>Podatki o predračunu</h3>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.OfferDate)
+                @Html.TextBox("Document_OfferDate", Model.Document.OfferDateString, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.OfferValidityDays)
+                @Html.TextBoxFor(p => p.Document.OfferValidityDays, new { type = "number", min = "0", @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.Document.OfferValidityDays)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.OfferDateOfOrder)
+                @Html.TextBox("Document_OfferDateOfOrder", Model.Document.OfferDateOfOrderString, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <h3>Podatki o računu</h3>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.InvoiceDate)
+                @Html.TextBox("Document_InvoiceDate", Model.Document.InvoiceDateString, new { @class = "form-control" })
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.InvoiceServiceFrom)
+                @Html.TextBox("Document_InvoiceServiceFrom", Model.Document.InvoiceServiceFromString, new { @class = "form-control" })
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.InvoiceServiceUntil)
+                @Html.TextBox("Document_InvoiceServiceUntil", Model.Document.InvoiceServiceUntil, new { @class = "form-control" })
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.InvoiceDateOfMaturity)
+                @Html.TextBox("Document_InvoiceDateOfMaturity", Model.Document.InvoiceDateOfMaturity, new { @class = "form-control" })
+
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.InvoiceDateOfOrder)
+                @Html.TextBox("Document_InvoiceDateOfOrderr", Model.Document.InvoiceDateOfOrder, new { @class = "form-control" })
+
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <h3>Podatki o dobanici</h3>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.DeliveryNoteDate)
+                @Html.TextBox("Document_DeliveryNoteDate", Model.Document.DeliveryNoteDate, new { @class = "form-control" })
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-12 table-responsive">
+                <table class="table table-bordered table-hover table-sortable" id="tab_logic">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                Izdelek
+                            </th>
+                            <th class="text-center">
+                                Količina
+                            </th>
+                            <th class="text-center">
+                                Cena
+                            </th>
+                            <th class="text-center">
+                                Popust
+                            </th>
+                            <th class="text-center">
+                                Davek
+                            </th>
+                            <th class="text-center">
+                                Vrednost
+                            </th>
+                            <th class="text-center" style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="articlesTableRow" id='addr0' data-id="0" class="hidden">
+                            <td id="item" data-name="item">
+                                <select name="item0" class="form-control">
+                                    <option value="">Izberi izdelek</option>
+                                    @{
+                                        @*foreach (var product in Model.ProductsList) //$("[name='sel1']").val();
+                                        {
+                                            <option value="@product.ProductId" data-item-price="@product.SellingPrice">@product.ShortName</option>
+                                        }*@
+                                    }
+                                </select>
+                            </td>
+                            <td id="quantity" data-name="quantity">
+                                <input class="form-control" label="Količina" type="number" name='q0' min="1" step="1" />
+                            </td>
+                            <td id="price" data-name="price">
+                                <input type="text" name='price0' class="form-control" disabled />
+                            </td>
+                            <td id="disc" data-name="disc">
+                                <input class="form-control" type="number" name='disc0' min="0" step="0.1" value="0" />
+                            </td>
+                            <td data-name="tax">
+                                <select name="tax0" class="form-control">
+                                    <option value="0" data-item-taxRate="0">0</option>
+                                    <option value="9.5" data-item-taxRate="9.5">9.5</option>
+                                    <option value="22" data-item-taxRate="22">22</option>
+                                </select>
+                            </td>
+                            <td id="val" data-name="val">
+                                <input class="form-control" type="text" disabled />
+                            </td>
+                            <td data-name="del">
+                                <button name="del0" class='btn btn-danger glyphicon glyphicon-remove row-remove'><span aria-hidden="true"></span></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <a id="add_row" class="btn btn-primary float-right">Add Row</a>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="col-lg-4">
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.TotalExcludingVAT)
+                @Html.TextBoxFor(p => p.Document.TotalExcludingVAT, new { @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.Document.TotalExcludingVAT)
+            </div>
+            @*<div class="form-group">
+                    @Html.LabelFor(p => p.Document.DiscountPercent)
+                    @Html.TextBoxFor(p => p.Document.DiscountPercent, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(p => p.Document.DiscountPercent)
+                </div>*@
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.DiscountAmount)
+                @Html.TextBoxFor(p => p.Document.DiscountAmount, new { @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.Document.DiscountAmount)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.AmountExcludingVAT)
+                @Html.TextBoxFor(p => p.Document.AmountExcludingVAT, new { @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.Document.AmountExcludingVAT)
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(p => p.Document.AmountIncludingVAT)
+                @Html.TextBoxFor(p => p.Document.AmountIncludingVAT, new { @class = "form-control" })
+                @Html.ValidationMessageFor(p => p.Document.AmountIncludingVAT)
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(p => p.Document.DocumentId)
+    <div class="col-lg-12">
+        @Html.AntiForgeryToken()
+        <button type="submit" class="btn btn-primary js-add">Posodobi</button>
+    </div>
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var docId = -1;
+        var skupajBrezDdv95 = 0;
+        var skupajBrezDdv22 = 0;
+        var znesekBrezDdv = 0;
+        var znesekPopusti = 0;
+
+        $(".js-add").click(function (e) {
+            alert("click");
+            e.preventDefault();
+            getTotals();
+
+            var document = {};
+            document.documentId = @Model.Document.DocumentId;
+            document.clientId = $('#Document_ClientId').val();
+            document.offerDate = $('#Document_OfferDate').val();
+            document.offerValidityDays = $('#Document_OfferValidityDays').val();
+            document.offerDateOfOrder = $('#Document_OfferDateOfOrder').val();
+            document.invoiceDate = $('#Document_InvoiceDate').val();
+            document.invoiceServiceFrom = $('#Document_InvoiceServiceFrom').val();
+            document.invoiceServiceFrom = new Date("08/06/2019");
+            alert("invoice service from: " + document.invoiceServiceFrom);
+            document.invoiceServiceUntil = $('#Document_InvoiceServiceUntil').val();
+
+            document.invoiceDateOfMaturity = $('#Document_InvoiceDateOfMaturity').val();
+            alert(1);
+            //document.invoiceDateOfOrder = $('#Document_InvoiceDateOfOrder').val();
+            document.invoiceDateOfOrder = $('#Document_InvoiceDateOfOrder').val();
+            alert(2);
+            document.deliveryNoteDate = $('#Document_DeliveryNoteDate').val();
+            alert(3);
+            document.totalExcludingVAT = $('#Document_TotalExcludingVAT').val();
+            alert(4);
+            document.discountAmount = $('#Document_DiscountAmount').val();
+            document.amountExcludingVAT = $('#Document_AmountExcludingVAT').val();
+            document.amountIncludingVAT = $('#Document_AmountIncludingVAT').val();
+            document.paidAmount = $('#Document_PaidAmount').val();
+
+            var docJson = JSON.stringify(document);
+            alert(docJson);
+
+            $.ajax({
+                url: "/api/documents/" + @Model.Document.DocumentId,
+                data: document,
+                method: "PUT",
+                success: function (data) {
+                    docId = data.documentId;
+                    //articles();
+                    alert("Updated");
+                }
+            });
+    });
+
+        function getTotals() {
+            var articlesList = [];
+
+            $.each($("#tab_logic tbody tr"), function () {
+                var neki = {};
+                neki.documentId = docId;
+                neki.productId = $(this).find('td:eq(0) select').val();
+                neki.quantity = $(this).find('td:eq(1) input').val();
+                neki.discount = $(this).find('td:eq(3) input').val();
+                neki.taxRate = $(this).find('td:eq(4) select').find(':selected').attr('data-item-taxRate');
+                neki.assemblyPrice = 100;
+                var total = neki.quantity * $(this).find('td:eq(0) select').find(':selected').attr('data-item-price');
+                znesekBrezDdv += total;
+                neki.price = total - (total * neki.discount / 100);
+                znesekPopusti += total * neki.discount / 100;
+
+                if (neki.taxRate == "9.5") {
+                    skupajBrezDdv95 += neki.price;
+                }
+                else if (neki.taxRate == "22") {
+                    skupajBrezDdv22 += neki.price;
+                }
+                articlesList.push(neki);
+            });
+        }
+
+        function articles() {
+            var articlesList = [];
+            //var neki = {};
+            $.each($("#tab_logic tbody tr"), function () {
+                var neki = {};
+                neki.documentId = docId;
+                neki.productId = $(this).find('td:eq(0) select').val();
+                neki.quantity = $(this).find('td:eq(1) input').val();
+                neki.discount = $(this).find('td:eq(3) input').val();
+                neki.taxRate = $(this).find('td:eq(4) select').find(':selected').attr('data-item-taxRate');
+                neki.assemblyPrice = 100;
+                var total = neki.quantity * $(this).find('td:eq(0) select').find(':selected').attr('data-item-price');
+                znesekBrezDdv += total;
+                neki.price = total - (total * neki.discount / 100);
+                znesekPopusti += total * neki.discount / 100;
+
+                if (neki.taxRate == "9.5") {
+                    skupajBrezDdv95 += neki.price;
+                }
+                else if (neki.taxRate == "22") {
+                    skupajBrezDdv22 += neki.price;
+                }
+                articlesList.push(neki);
+            });
+            var articlesJson = JSON.stringify(articlesList);
+            //alert(articlesJson);
+            $.ajax({
+                url: "/api/articles/",
+                contentType: "application/json",
+                data: articlesJson,
+                method: "POST",
+                success: function () {
+                    //alert("mogl bi");
+                }
+            });
+        }
+
+
+        $(document).ready(function() {
+            $("#add_row").on("click",
+                function() {
+                    // Dynamic Rows Code
+
+                    // Get max row id and set new id
+                    var newid = 0;
+                    $.each($("#tab_logic tr"),
+                        function() {
+                            if (parseInt($(this).data("id")) > newid) {
+                                newid = parseInt($(this).data("id"));
+                            }
+                        });
+                    newid++;
+
+                    var tr = $("<tr></tr>",
+                        {
+                            id: "addr" + newid,
+                            "data-id": newid
+                        });
+
+                    // loop through each td and create new elements with name of newid
+                    $.each($("#tab_logic tbody tr:nth(0) td"),
+                        function() {
+                            var td;
+                            var cur_td = $(this);
+
+                            var children = cur_td.children();
+
+                            // add new td and element if it has a nane
+                            if ($(this).data("name") !== undefined) {
+                                td = $("<td></td>",
+                                    {
+                                        "data-name": $(cur_td).data("name")
+                                    });
+
+                                var c = $(cur_td).find($(children[0]).prop('tagName')).clone().val("");
+                                c.attr("name", $(cur_td).data("name") + newid);
+                                c.appendTo($(td));
+                                td.appendTo($(tr));
+                            } else {
+                                td = $("<td></td>",
+                                    {
+                                        'text': $('#tab_logic tr').length
+                                    }).appendTo($(tr));
+                            }
+                        });
+
+                    // add delete button and td
+                    /*
+                    $("<td></td>").append(
+                        $("<button class='btn btn-danger glyphicon glyphicon-remove row-remove'></button>")
+                            .click(function() {
+                                $(this).closest("tr").remove();
+                            })
+                    ).appendTo($(tr));
+                    */
+
+                    // add the new row
+                    $(tr).appendTo($('#tab_logic'));
+
+                    $(tr).find("td button.row-remove").on("click",
+                        function() {
+                            $(this).closest("tr").remove();
+                        });
+                });
+
+        });
+    </script>
+}

@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Kategorije izdelkov</h2>
+
+<a href="#" class="btn btn-primary a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("New", "Categories") + "'");">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    <span>Dodaj</span>
+</a>
+
+<div><br /></div>
+
+<table id="categories" class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Naziv</th>
+            <th scope="col">Opis</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr></tr>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#categories").DataTable({
+                ajax: {
+                    url: "/api/categories",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "categoryId"
+                    },
+                    {
+                        data: "categoryName",
+                        render: function (data, type, category) {
+                            return "<b>" + data + "</b>";
+                        }
+                    },
+                    {
+                        data: "categoryDescription"
+                    }
+                ]
+            });
+        })
+    </script>
+}

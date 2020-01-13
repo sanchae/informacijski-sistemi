@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Dokumenti</h2>
+
+<a href="#" class="btn btn-primary a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("New", "Documents") + "'");">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    <span>Dodaj</span>
+</a>
+
+<div><br /></div>
+<table id="documents" class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Stranka</th>
+            <th scope="col">Tip</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Cena z DDV</th>
+            @*<th scope="col">Plačano</th>*@
+            <th scope="col">Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr></tr>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#documents").DataTable({
+                ajax: {
+                    url: "/api/documents",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "documentId"
+                        //render: function(data, type, product) {
+                        //    return "<a href='products/edit/" + product.ProductId + "'>" + product.ProductName + "</a>";
+                        //}
+                    },
+                    {
+                        data: "client.name",
+                        //render: function(data, type, product) {
+                        //    return "<a href='products/edit/" + product.productId + "'>" + data + "</a>";
+                        //}
+                        render: function (data, type, client) {
+                            return "<b>" + data + "</b";
+                        }
+                    },
+                    {
+                        data: "client.type"
+                    },
+                    {
+                        data: "offerDate",
+                        render: function (data) {
+                            var d = new Date(data);
+                            return d.toLocaleDateString("de");
+                        }
+                    },
+                    {
+                        data: "amountIncludingVAT",
+                        render: function (data) {
+                            return data + "€";
+                        }
+                    },
+                    //{
+                    //    data: "paidAmount",
+                    //    render: function (data) {
+                    //        return data + "€";
+                    //    }
+                    //},
+                    {
+                        data: "documentId",
+                        render: function (data, type, document) {
+                            return "<button class='btn btn-xs btn-primary'><a href='/documents/details/" + document.documentId + "'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>  Več  </a></button> " +
+                                //"<button class='btn btn-xs btn-info'><a href='/documents/edit/" + document.documentId + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> Uredi</a></button> " +
+                                "<button class='btn btn-xs btn-danger js-delete' data-documents-id=" + data + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Izbriši</button>";
+                        }
+                    }
+                ]
+            });
+            $("#documents").on("click", ".js-delete",
+                function () {
+                    var button = $(this);
+                    bootbox.confirm("Ali ste pripričani, da želite izbrisati ta dokument?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/documents/" + button.attr("data-documents-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        button.parents("tr").remove();
+                                    }
+                                });
+                            }
+                        });
+                });
+        })
+    </script>
+}
+

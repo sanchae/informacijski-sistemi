@@ -1,0 +1,95 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Stranke</h2>
+
+<a href="#" class="btn btn-primary a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("New", "Clients") + "'");">
+    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    <span>Dodaj</span>
+</a>
+<a href="#" class="btn btn-info a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("Index", "Country") + "'");">
+    <span>Države</span>
+</a>
+
+<div><br /></div>
+
+<table id="clients" class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ime</th>
+            <th scope="col">Tip</th>
+            <th scope="col">Email</th>
+            <th scope="col">Tel. št.</th>
+            <th scope="col">Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr></tr>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#clients").DataTable({
+                ajax: {
+                    url: "/api/clients",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "id"
+                    },
+                    {
+                        data: "name",
+                        render: function (data, type, name) {
+                            return "<b>" + data + "</b";
+                        }
+                    },
+                    {
+                        data: "type"
+                    },
+                    {
+                        data: "email",
+                        render: function(data) {
+                            return "<a href=mailto:" + data + ">" + data + "</a>";
+                        }
+                    },
+                    {
+                        data: "phoneNumber"
+                    },
+                    {
+                        data: "id",
+                        render: function (data, type, client) {
+                            return "<button class='btn btn-xs btn-primary'><a href='/clients/details/" + client.id + "'><span class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>  Več  </a></button> " +
+                                "<button class='btn btn-xs btn-info'><a href='/clients/edit/" + client.id + "'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> Uredi</a></button> " +
+                                "<button class='btn btn-xs btn-danger js-delete' data-client-id=" + data + "><span class='glyphicon glyphicon-remove' aria-hidden='true'></span> Izbriši</button>";
+                        }
+                    }
+                ]
+            });
+            $("#clients").on("click", ".js-delete",
+                function () {
+                    var button = $(this);
+                    bootbox.confirm("Ali ste pripričani, da želite izbrisati to stranko?",
+                        function (result) {
+                            if (result) {
+                                $.ajax({
+                                    url: "/api/clients/" + button.attr("data-client-id"),
+                                    method: "DELETE",
+                                    success: function () {
+                                        button.parents("tr").remove();
+                                    }
+                                });
+                            }
+                        });
+                });
+        })
+    </script>
+}
+
+

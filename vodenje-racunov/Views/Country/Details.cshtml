@@ -1,0 +1,14 @@
+﻿@model vodenje_racunov.Models.Country
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.CountryName</h2>
+
+
+<p>
+    @Html.ActionLink("Uredi", "Edit", new { id = Model.CountryId }) |
+    @Html.ActionLink("Nazaj na seznam držav", "Index")
+</p>

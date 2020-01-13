@@ -1,0 +1,36 @@
+﻿@using Microsoft.Ajax.Utilities
+@using vodenje_racunov.ViewModels
+@model vodenje_racunov.Models.Country
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model == null)
+{
+    <h2>Nov</h2>
+}
+else
+{
+    <h2>Urejanje</h2>
+}
+@using (Html.BeginForm("Save", "Country"))
+{
+    @Html.ValidationSummary(true, "Prišlo je do napake. Preverite vnosna polja.")
+    <div class="form-group">
+        @Html.LabelFor(p => p.CountryName)
+        @Html.TextBoxFor(p => p.CountryName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.CountryName)
+    </div>
+
+
+    @Html.HiddenFor(p => p.CountryId)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Shrani</button>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

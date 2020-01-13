@@ -1,0 +1,105 @@
+﻿@using System.Web.UI.WebControls
+@using Microsoft.Ajax.Utilities
+@using vodenje_racunov.ViewModels
+@model vodenje_racunov.ViewModels.ClientFormViewModel
+
+@{
+    ViewBag.Title = "ClientForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    var selectList = new SelectList(
+        new List<SelectListItem>
+        {
+            new SelectListItem {Text = "Fizična oseba", Value = "Fizična oseba"},
+            new SelectListItem {Text = "Pravna oseba", Value = "Pravna oseba"},
+            new SelectListItem {Text = "Samostojni podjetnik", Value = "Samostojni podjetnik"},
+            new SelectListItem {Text = "Drugo", Value = "Drugo"},
+                }, "Value", "Text");
+}
+
+@if (Model.Client == null)
+{
+    <h2>Nov</h2>
+}
+else
+{
+    <h2>Urejanje</h2>
+}
+@using (Html.BeginForm("Save", "Clients"))
+{
+    @Html.ValidationSummary(true, "Prišlo je do napake. Preverite vnosna polja.")
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.Name)
+        @Html.TextBoxFor(p => p.Client.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Client.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.Type)
+        @Html.DropDownListFor(m => m.Client.Type, selectList, "Izberi tip", new { @class = "form-control" })
+        @*@Html.TextBoxFor(p => p.Client.Type, new { @class = "form-control" })*@
+        @Html.ValidationMessageFor(p => p.Client.Type)
+    </div>
+    //TYPE
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.RegistrationNumber)
+        @Html.TextBoxFor(p => p.Client.RegistrationNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Client.RegistrationNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.Email)
+        @Html.TextBoxFor(p => p.Client.Email, new { type = "email", placeholder = "client@gmail.com", @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Client.Email)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.PhoneNumber)
+        @Html.TextBoxFor(p => p.Client.PhoneNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Client.PhoneNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.taxNumber)
+        @Html.TextBoxFor(p => p.Client.taxNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Client.taxNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.taxPayer)
+        @Html.CheckBoxFor(p => p.Client.taxPayer, new { @class = "custom-control custom-checkbox" })
+        @Html.ValidationMessageFor(p => p.Client.taxNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.StreetName)
+        @Html.TextBoxFor(p => p.Client.StreetName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Client.StreetName)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.StreetNumber)
+        @Html.TextBoxFor(p => p.Client.StreetNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Client.StreetNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.PostNumber)
+        @Html.TextBoxFor(p => p.Client.PostNumber, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Client.PostNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.City)
+        @Html.TextBoxFor(p => p.Client.City, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Client.City)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(p => p.Client.CountryId)
+        <a href="#" class="btn btn-secondary a-btn-slide-text" onclick="@("window.location.href='" + @Url.Action("New", "Country") + "'");" style="padding-top: 3px;">
+            <span>Dodaj državo</span>
+        </a>
+        @Html.DropDownListFor(p => p.Client.CountryId, new SelectList(Model.CountriesList, "CountryId", "CountryName"), "Izberi proizvajalca", new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.Client.CountryId)
+    </div>
+    @Html.HiddenFor(p => p.Client.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Shrani</button>
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

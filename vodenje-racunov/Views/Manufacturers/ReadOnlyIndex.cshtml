@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Proizvajalci</h2>
+
+<div><br /></div>
+
+<table id="manufacturers" class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ime</th>
+            <th scope="col">Email</th>
+            <th scope="col">Tel. št.</th>
+            <th scope="col">Država</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr></tr>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+    $(document).ready(function () {
+        var table = $("#manufacturers").DataTable({
+            ajax: {
+                url: "/api/manufacturers",
+                dataSrc: ""
+            },
+            columns: [
+                {
+                    data: "manufacturerId"
+                },
+                {
+                    data: "manufacturerName",
+                    render: function(data, type, product) {
+                        return "<b>" + data + "</b";
+                    }
+                },
+                {
+                    data: "manufacturerEmail"
+                },
+                {
+                    data: "manufacturerPhoneNumber"
+                },
+                {
+                    data: "country.countryName"
+                }
+            ]
+        });
+    })
+    </script>
+}

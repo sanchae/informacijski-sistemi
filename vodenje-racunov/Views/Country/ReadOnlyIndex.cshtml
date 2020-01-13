@@ -1,0 +1,48 @@
+﻿@model IEnumerable<vodenje_racunov.Models.Country>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Države</h2>
+
+<div><br /></div>
+
+<table id="countries" class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ime</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr></tr>
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            var table = $("#countries").DataTable({
+                ajax: {
+                    url: "/api/country",
+                    dataSrc: ""
+                },
+                columns: [
+                    {
+                        data: "countryId"
+                    },
+
+                    {
+                        data: "countryName",
+                        render: function(data, type, country) {
+                            return "<b>" + country.countryName + "</b>";
+                        }
+                    }
+                ]
+            });
+        })
+    </script>
+}

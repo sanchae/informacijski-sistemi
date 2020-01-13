@@ -1,0 +1,42 @@
+﻿@using Microsoft.Ajax.Utilities
+@using vodenje_racunov.ViewModels
+@model vodenje_racunov.Models.Category
+
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model == null)
+{
+    <h2>Nov</h2>
+}
+else
+{
+    <h2>Urejanje</h2>
+}
+@using (Html.BeginForm("Save", "Categories"))
+{
+    @Html.ValidationSummary(true, "Prišlo je do napake. Preverite vnosna polja.")
+    <div class="form-group">
+        @Html.LabelFor(p => p.CategoryName)
+        @Html.TextBoxFor(p => p.CategoryName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.CategoryName)
+    </div>
+
+    @Html.ValidationSummary(true, "Prišlo je do napake. Preverite vnosna polja.")
+    <div class="form-group">
+        @Html.LabelFor(p => p.CategoryDescription)
+        @Html.TextAreaFor(p => p.CategoryDescription, new { @class = "form-control" })
+        @Html.ValidationMessageFor(p => p.CategoryDescription)
+    </div>
+
+    @Html.HiddenFor(p => p.CategoryId)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Shrani</button>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
